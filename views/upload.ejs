@@ -7,6 +7,8 @@
 
   <title>Upload a Paper — UniQBank</title>
 
+  <script>(function () { var s = localStorage.getItem('uniqbank-theme'); document.documentElement.setAttribute('data-theme', s === 'dark' ? 'dark' : 'light'); })();</script>
+
   <style>
     /* =========================
        RESET
@@ -116,6 +118,12 @@
 
     .back-link:hover {
       color: #172b4d;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
 
@@ -494,6 +502,86 @@
         font-size: 29px;
       }
     }
+
+    /* =========================
+        DARK MODE
+    ========================= */
+
+    html[data-theme="dark"] body {
+      background: #0f172a;
+      color: #e2e8f0;
+    }
+
+    .theme-toggle {
+      width: 38px;
+      height: 38px;
+      border: 1px solid #dce2ea;
+      border-radius: 8px;
+      background: #ffffff;
+      color: #172b4d;
+      font-size: 16px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .theme-toggle:hover {
+      background: #f8fafc;
+    }
+
+    html[data-theme="dark"] .header,
+    html[data-theme="dark"] .footer,
+    html[data-theme="dark"] .form-card,
+    html[data-theme="dark"] .input,
+    html[data-theme="dark"] .select,
+    html[data-theme="dark"] .info-box,
+    html[data-theme="dark"] .theme-toggle {
+      background: #1e293b;
+      border-color: #334155;
+    }
+
+    html[data-theme="dark"] .theme-toggle:hover {
+      background: #16233b;
+    }
+
+    html[data-theme="dark"] .brand-name,
+    html[data-theme="dark"] .title,
+    html[data-theme="dark"] .footer-brand,
+    html[data-theme="dark"] .input,
+    html[data-theme="dark"] .select,
+    html[data-theme="dark"] .label,
+    html[data-theme="dark"] .theme-toggle {
+      color: #e2e8f0;
+    }
+
+    html[data-theme="dark"] .brand-subtitle,
+    html[data-theme="dark"] .back-link,
+    html[data-theme="dark"] .description,
+    html[data-theme="dark"] .help-text,
+    html[data-theme="dark"] .file-help,
+    html[data-theme="dark"] .footer-text,
+    html[data-theme="dark"] .footer-link,
+    html[data-theme="dark"] .info-box {
+      color: #94a3b8;
+    }
+
+    html[data-theme="dark"] .input::placeholder {
+      color: #64748b;
+    }
+
+    html[data-theme="dark"] .file-input {
+      background: #16233b;
+      border-color: #334155;
+      color: #94a3b8;
+    }
+
+    html[data-theme="dark"] .error-message {
+      background: rgba(185, 28, 28, 0.18);
+      border-color: rgba(239, 68, 68, 0.35);
+      color: #fca5a5;
+    }
   </style>
 </head>
 
@@ -532,10 +620,15 @@
 
 
       <!-- Back -->
+      <div class="header-actions">
 
-      <a href="/" class="back-link">
-        ← Back to Browse
-      </a>
+        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">🌙</button>
+
+        <a href="/" class="back-link">
+          ← Back to Browse
+        </a>
+
+      </div>
 
     </div>
 
@@ -580,310 +673,228 @@
          ERROR
     ========================= -->
 
-    <% if (typeof error !== 'undefined' && error) { %>
+    <% if (typeof error !=='undefined' && error) { %>
 
       <div class="error-message">
         <%= error %>
       </div>
 
-    <% } %>
+      <% } %>
 
 
-    <!-- =========================
+        <!-- =========================
          FORM
     ========================= -->
 
-    <form
-      action="/upload"
-      method="POST"
-      enctype="multipart/form-data"
-      class="form-card"
-    >
+        <form action="/upload" method="POST" enctype="multipart/form-data" class="form-card">
 
-      <div class="form-grid">
+          <div class="form-grid">
 
 
-        <!-- =========================
+            <!-- =========================
              Department
         ========================= -->
 
-        <div class="form-group">
+            <div class="form-group">
 
-          <label
-            for="department"
-            class="label"
-          >
-            Department
-            <span class="required">*</span>
-          </label>
+              <label for="department" class="label">
+                Department
+                <span class="required">*</span>
+              </label>
 
 
-          <input
-            type="text"
-            id="department"
-            name="department"
-            required
-            autocomplete="off"
-            list="departmentList"
-            placeholder="Search or type department (e.g. CSE)"
-            class="input"
-          >
+              <input type="text" id="department" name="department" required autocomplete="off" list="departmentList"
+                placeholder="Search or type department (e.g. CSE)" class="input">
 
 
-          <!-- Existing departments -->
+              <!-- Existing departments -->
 
-          <datalist id="departmentList">
+              <datalist id="departmentList">
 
-            <% departments.forEach(function(dept) { %>
+                <% departments.forEach(function(dept) { %>
 
-              <option value="<%= dept %>">
+                  <option value="<%= dept %>">
 
-            <% }); %>
+                    <% }); %>
 
-          </datalist>
-
-
-          <p class="help-text">
-            Select an existing department or type a new one.
-          </p>
-
-        </div>
+              </datalist>
 
 
-        <!-- =========================
+              <p class="help-text">
+                Select an existing department or type a new one.
+              </p>
+
+            </div>
+
+
+            <!-- =========================
              Semester
         ========================= -->
 
-        <div class="form-group">
+            <div class="form-group">
 
-          <label
-            for="semester"
-            class="label"
-          >
-            Semester
-            <span class="required">*</span>
-          </label>
+              <label for="semester" class="label">
+                Semester
+                <span class="required">*</span>
+              </label>
 
 
-          <select
-            id="semester"
-            name="semester"
-            required
-            class="select"
-          >
+              <select id="semester" name="semester" required class="select">
 
-            <option
-              value=""
-              disabled
-              selected
-            >
-              Select semester
-            </option>
+                <option value="" disabled selected>
+                  Select semester
+                </option>
 
 
-            <% semesters.forEach(function(sem) { %>
+                <% semesters.forEach(function(sem) { %>
 
-              <option value="<%= sem %>">
-                <%= sem %>
-              </option>
+                  <option value="<%= sem %>">
+                    <%= sem %>
+                  </option>
 
-            <% }); %>
+                  <% }); %>
 
-          </select>
+              </select>
 
-        </div>
+            </div>
 
 
-        <!-- =========================
+            <!-- =========================
              Course Code
         ========================= -->
 
-        <div class="form-group">
+            <div class="form-group">
 
-          <label
-            for="courseCode"
-            class="label"
-          >
-            Course Code
-            <span class="required">*</span>
-          </label>
+              <label for="courseCode" class="label">
+                Course Code
+                <span class="required">*</span>
+              </label>
 
 
-          <input
-            type="text"
-            id="courseCode"
-            name="courseCode"
-            required
-            autocomplete="off"
-            placeholder="e.g. CSE220"
-            class="input"
-          >
+              <input type="text" id="courseCode" name="courseCode" required autocomplete="off" placeholder="e.g. CSE220"
+                class="input">
 
-        </div>
+            </div>
 
 
-        <!-- =========================
+            <!-- =========================
              Course Title
         ========================= -->
 
-        <div class="form-group">
+            <div class="form-group">
 
-          <label
-            for="courseTitle"
-            class="label"
-          >
-            Course Title
-            <span class="required">*</span>
-          </label>
+              <label for="courseTitle" class="label">
+                Course Title
+                <span class="required">*</span>
+              </label>
 
 
-          <input
-            type="text"
-            id="courseTitle"
-            name="courseTitle"
-            required
-            autocomplete="off"
-            placeholder="e.g. Data Structures"
-            class="input"
-          >
+              <input type="text" id="courseTitle" name="courseTitle" required autocomplete="off"
+                placeholder="e.g. Data Structures" class="input">
 
-        </div>
+            </div>
 
 
-        <!-- =========================
+            <!-- =========================
              Exam Type
         ========================= -->
 
-        <div class="form-group">
+            <div class="form-group">
 
-          <label
-            for="examType"
-            class="label"
-          >
-            Exam Type
-            <span class="required">*</span>
-          </label>
+              <label for="examType" class="label">
+                Exam Type
+                <span class="required">*</span>
+              </label>
 
 
-          <select
-            id="examType"
-            name="examType"
-            required
-            class="select"
-          >
+              <select id="examType" name="examType" required class="select">
 
-            <option
-              value=""
-              disabled
-              selected
-            >
-              Select exam type
-            </option>
+                <option value="" disabled selected>
+                  Select exam type
+                </option>
 
 
-            <% examTypes.forEach(function(type) { %>
+                <% examTypes.forEach(function(type) { %>
 
-              <option value="<%= type %>">
-                <%= type %>
-              </option>
+                  <option value="<%= type %>">
+                    <%= type %>
+                  </option>
 
-            <% }); %>
+                  <% }); %>
 
-          </select>
+              </select>
 
-        </div>
+            </div>
 
 
-        <!-- =========================
+            <!-- =========================
              Session / Year
         ========================= -->
 
-        <div class="form-group">
+            <div class="form-group">
 
-          <label
-            for="sessionYear"
-            class="label"
-          >
-            Session / Year
-            <span class="required">*</span>
-          </label>
+              <label for="sessionYear" class="label">
+                Session / Year
+                <span class="required">*</span>
+              </label>
 
 
-          <input
-            type="text"
-            id="sessionYear"
-            name="sessionYear"
-            required
-            autocomplete="off"
-            placeholder="e.g. 2023-2024"
-            class="input"
-          >
+              <input type="text" id="sessionYear" name="sessionYear" required autocomplete="off"
+                placeholder="e.g. 2023-2024" class="input">
 
-        </div>
+            </div>
 
 
-        <!-- =========================
+            <!-- =========================
              File
         ========================= -->
 
-        <div class="form-group full-width">
+            <div class="form-group full-width">
 
-          <label
-            for="file"
-            class="label"
-          >
-            Question Paper File
-            <span class="required">*</span>
-          </label>
+              <label for="file" class="label">
+                Question Paper File
+                <span class="required">*</span>
+              </label>
 
 
-          <input
-            type="file"
-            id="file"
-            name="file"
-            required
-            accept=".pdf,.jpg,.jpeg,.png,.webp,.gif"
-            class="file-input"
-          >
+              <input type="file" id="file" name="file" required accept=".pdf,.jpg,.jpeg,.png,.webp,.gif"
+                class="file-input">
 
 
-          <p class="file-help">
-            Accepted formats: PDF, JPG, PNG, WEBP, GIF · Maximum size: 15 MB
-          </p>
+              <p class="file-help">
+                Accepted formats: PDF, JPG, PNG, WEBP, GIF · Maximum size: 15 MB
+              </p>
 
-        </div>
-
-
-      </div>
+            </div>
 
 
-      <!-- =========================
+          </div>
+
+
+          <!-- =========================
            SUBMIT
       ========================= -->
 
-      <button
-        type="submit"
-        class="submit-button"
-      >
-        Upload Question Paper
-      </button>
+          <button type="submit" class="submit-button">
+            Upload Question Paper
+          </button>
 
 
-      <!-- =========================
+          <!-- =========================
            INFO
       ========================= -->
 
-      <div class="info-box">
+          <div class="info-box">
 
-        <strong>Before uploading:</strong>
+            <strong>Before uploading:</strong>
 
-        Make sure the course information is correct and the uploaded paper
-        is readable. Uploaded papers are publicly accessible to everyone.
+            Make sure the course information is correct and the uploaded paper
+            is readable. Uploaded papers are publicly accessible to everyone.
 
-      </div>
+          </div>
 
 
-    </form>
+        </form>
 
   </main>
 
@@ -909,16 +920,15 @@
       </div>
 
 
-      <a
-        href="/"
-        class="footer-link"
-      >
+      <a href="/" class="footer-link">
         Browse Question Papers
       </a>
 
     </div>
 
   </footer>
+
+  <script src="/public/js/theme.js"></script>
 
 </body>
 
